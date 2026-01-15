@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Teste Gemini API</title>
+    <style>
+        body { font-family: sans-serif; max-width: 500px; margin: 50px auto; padding: 20px; }
+        textarea { width: 100%; height: 80px; margin-bottom: 10px; border-radius: 8px; padding: 10px; border: 1px solid #ccc; }
+        button { width: 100%; background-color: #3bb456; color: white; border: none; padding: 12px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        button:disabled { background-color: #ccc; }
+        #output { margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 8px; min-height: 50px; white-space: pre-wrap; }
+    </style>
+</head>
+
+<body>
+
+    <h3>Meu primeiro agente de IA</h3>
+    <textarea id="prompt" placeholder="Digite sua pergunta aqui..."></textarea>
+    <button id="sendBtn">Enviar para o Gemini</button>
+    <div id="output"></div>
+
+<script>
+    const API_KEY = "AIzaSyDvCVZZnQMR5I0rjXqX3vtd0_qu9K01aSc"; 
+
+    const promptInput = document.getElementById('prompt');
+    const sendBtn = document.getElementById('sendBtn');
+    const outputDiv = document.getElementById('output');
+
+    sendBtn.addEventListener('click', async () => {
+        const prompt = promptInput.value;
+        if (!prompt) return;
+
+        sendBtn.disabled = true;
+        outputDiv.innerText = "Buscando resposta...";
+
+        // Atualizado para o endpoint v1beta e o modelo Gemini 3
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${API_KEY}`;
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }]
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.error) {
+                throw new Error(`${data.error.status}: ${data.error.message}`);
+            }
+
+            const textResponse = data.candidates[0].content.parts[0].text;
+            outputDiv.innerText = textResponse;
+
+        } catch (error) {
+            console.error("Erro:", error);
+            outputDiv.innerHTML = `<span style="color:red"><b>Erro de Conexão:</b> ${error.message}</span>`;
+        } finally {
+            sendBtn.disabled = false;
+        }
+    });
+</script>
+</body>
+</html>
