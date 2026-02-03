@@ -3,17 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cosmos | API IA</title>
+    <title>Cosmos | Data Voyager</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
     <style>
         :root {
             --bg-color: #020406; 
             --primary: #7D5FFF;
-            --secondary: #00ff55;
+            --secondary: #00ffaa;
             --text-main: #E6E6E6;
-            --card-bg: rgba(85, 104, 139, 0.4); /* Transparência para exibir as estrelas */
+            --card-bg: rgba(69, 71, 77, 0.884);
         }
 
-        /* --- FUNDO ESTELAR DENSO E DINÂMICO ---- */
+        /* --- FUNDO ESTELAR DINÂMICO --- */
         body {
             margin: 0;
             padding: 40px 20px;
@@ -25,46 +28,36 @@
             flex-direction: column;
             align-items: center;
             overflow: hidden;
-
-            /* Múltiplas camadas de gradiente para densidade estelar */
             background-image: 
                 radial-gradient(1px 1px at 10px 10px, #fff, rgba(0,0,0,0)),
-                radial-gradient(1px 1px at 50px 100px, #7d5fff, rgba(0,0,0,0)),
-                radial-gradient(1px 1px at 150px 40px, #fff, rgba(0,0,0,0)),
-                radial-gradient(1.5px 1.5px at 200px 150px, #00ffd1, rgba(0,0,0,0)),
-                radial-gradient(1px 1px at 250px 50px, #fff, rgba(0,0,0,0)),
-                radial-gradient(1px 1px at 300px 250px, #7d5fff, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 350px 120px, #fff, rgba(0,0,0,0)),
-                radial-gradient(1px 1px at 20px 350px, #00ffd1, rgba(0,0,0,0)),
-                radial-gradient(1.5px 1.5px at 80px 220px, #fff, rgba(0,0,0,0)),
-                /* Camada de profundidade (nebulosa sutil) */
-                radial-gradient(4px 4px at 100px 300px, rgba(125, 95, 255, 0.1), rgba(0,0,0,0));
-            
+                radial-gradient(1.5px 1.5px at 150px 100px, #7D5FFF, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 250px 280px, #00FFD1, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 350px 80px, #fff, rgba(0,0,0,0));
             background-repeat: repeat;
-            background-size: 350px 350px; /* Quadrante menor aumenta a densidade */
-            animation: cosmosTravel 140s linear infinite;
+            background-size: 400px 400px;
+            animation: cosmosTravel 180s linear infinite;
         }
 
         @keyframes cosmosTravel {
             from { background-position: 0 0; }
-            to { background-position: 350px 1000px; } /* Movimento diagonal imersivo */
+            to { background-position: 350px 1000px; }
         }
 
-        /* --- INTERFACE COSMOS (MINIMALISTA) --- */
         .brand-header { text-align: center; z-index: 10; margin-bottom: 25px; }
         .brand-header h1 { 
-            font-size: 1.8rem; 
+            font-size: 2rem; 
             background: linear-gradient(to right, var(--secondary), var(--primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin: 0;
-            letter-spacing: 10px;
+            letter-spacing: 8px;
             font-weight: 900;
         }
 
+        /* --- CONTAINER DE CHAT --- */
         #chat-container { 
             width: 100%;
-            max-width: 500px; /* Reduzido para expor mais o fundo */
+            max-width: 550px;
             flex-grow: 1; 
             overflow-y: auto; 
             margin-bottom: 20px;
@@ -72,42 +65,40 @@
             background: var(--card-bg);
             border-radius: 25px; 
             border: 1px solid rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px); /* Efeito de vidro */
+            backdrop-filter: blur(12px);
             display: flex;
             flex-direction: column;
             gap: 15px;
             z-index: 10;
         }
 
+        /* --- ESTILIZAÇÃO MENSAGENS & MARKDOWN --- */
         .msg { padding: 12px 18px; border-radius: 16px; max-width: 85%; font-size: 0.85rem; line-height: 1.5; }
         .user { align-self: flex-end; background: var(--primary); color: white; border-bottom-right-radius: 2px; }
         .ai { align-self: flex-start; background: rgba(0, 0, 0, 0.25); border-left: 2px solid var(--secondary); border-bottom-left-radius: 2px; }
 
+        /* Estilos específicos para o conteúdo gerado pelo Markdown */
+        .msg.ai ul, .msg.ai ol { padding-left: 20px; margin: 10px 0; }
+        .msg.ai code { background: rgba(255, 255, 255, 0.1); padding: 2px 5px; border-radius: 4px; font-family: monospace; }
+        .msg.ai pre { background: #000; padding: 10px; border-radius: 8px; overflow-x: auto; border: 1px solid var(--secondary); margin: 10px 0; }
+
         .input-box { 
             width: 100%;
-            max-width: 500px;
+            max-width: 550px;
             background: var(--card-bg);
             padding: 15px;
             border-radius: 20px;
-            border: 1px solid rgba(207, 192, 192, 0.05);
-            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
             z-index: 10;
         }
         
-        textarea { 
-            width: 100%; height: 40px; border: none; background: transparent; 
-            color: white; outline: none; resize: none; font-size: 0.9rem;
-        }
-
+        textarea { width: 100%; height: 45px; border: none; background: transparent; color: white; outline: none; resize: none; font-size: 0.9rem; }
         .actions { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
         .btn { padding: 8px 20px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 0.75rem; transition: 0.3s; }
-        
         #sendBtn { background: var(--secondary); color: #030508; }
-        #sendBtn:hover { box-shadow: 0 0 20px rgba(0, 255, 209, 0.4); transform: scale(1.02); }
-        #clearBtn { background: transparent; color: #555; }
-        #clearBtn:hover { color: var(--text-main); }
+        #clearBtn { background: var(--primary); color: #ffffff; }
 
-        /* Scrollbar discreta */
         #chat-container::-webkit-scrollbar { width: 4px; }
         #chat-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
     </style>
@@ -115,36 +106,64 @@
 <body>
 
     <div class="brand-header">
-        <h1>COSMOS IA</h1>
-        <h4>Seu assistente interestelar de conhecimento</h4>
+        <h1>COSMOS</h1>
     </div>
     
     <div id="chat-container">
-        <div class="msg ai"><b>Cosmos:</b> Sistemas estabilizados. Navegando pela nuvem de dados. Como posso guiar sua exploração?</div>
+        <div class="msg ai"><b>Cosmos:</b> Sincronizando personalidade estelar...</div>
     </div>
 
     <div class="input-box">
-        <textarea id="prompt" placeholder="Sua coordenada para o Cosmos..."></textarea>
+        <textarea id="prompt" placeholder="Sondar o cosmos..."></textarea>
         <div class="actions">
             <button id="clearBtn" class="btn">RESET</button>
-            <button id="sendBtn" class="btn">ENVIAR</button>
+            <button id="sendBtn" class="btn" disabled>AGUARDE...</button>
         </div>
     </div>
 
     <script>
         const API_KEY = "AIzaSyDvCVZZnQMR5I0rjXqX3vtd0_qu9K01aSc"; 
-        const MODELO = "gemini-3-flash-preview"; 
+        const MODELO = "gemini-3-flash-preview"; //
         let historico = [];
+        let instrucaoSistema = "";
 
         const promptInput = document.getElementById('prompt');
         const sendBtn = document.getElementById('sendBtn');
         const clearBtn = document.getElementById('clearBtn');
         const chatContainer = document.getElementById('chat-container');
 
+        // Carregar personalidade do arquivo TXT externo
+        async function carregarPersonalidade() {
+            try {
+                const response = await fetch('personalidade.txt');
+                if (!response.ok) throw new Error("Falha no arquivo");
+                instrucaoSistema = await response.text();
+                
+                sendBtn.disabled = false;
+                sendBtn.innerText = "ENVIAR";
+                chatContainer.innerHTML = `<div class="msg ai"><b>Cosmos:</b> Personalidade carregada. Todos os sistemas estão em órbita.</div>`;
+            } catch (err) {
+                console.error(err);
+                instrucaoSistema = "Você é o Cosmos, um guia de tecnologia.";
+                sendBtn.disabled = false;
+                sendBtn.innerText = "ENVIAR";
+            }
+        }
+
+        carregarPersonalidade();
+
+        // Função de renderização com suporte a Markdown
         function adicionarMensagem(texto, remetente) {
             const div = document.createElement('div');
             div.className = `msg ${remetente}`;
-            div.innerHTML = `<b>${remetente === 'user' ? 'Você' : 'Cosmos'}:</b><br>${texto}`;
+            
+            if (remetente === 'ai') {
+                // Usa a biblioteca Marked para converter Markdown em HTML
+                div.innerHTML = `<b>Cosmos:</b><br>${marked.parse(texto)}`;
+            } else {
+                div.innerText = `Você: ${texto}`;
+            }
+            
             chatContainer.appendChild(div);
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
@@ -154,7 +173,7 @@
             if (!userMsg) return;
 
             adicionarMensagem(userMsg, 'user');
-            historico.push({ role: "user", parts: [{ text: userMsg }] });
+            historico.push({ role: "user", parts: [{ text: userMsg }] }); //
             promptInput.value = "";
             sendBtn.disabled = true;
 
@@ -165,25 +184,20 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        system_instruction: { 
-                            parts: [{ text: "Você é o Cosmos, um assistente especializado em Cloud Computing," +
-                                            " Inteligência Artificial e Dados. Suas respostas são cirúrgicas, profissionais e inspiradoras." +
-                                             "caso perguntem quem desenvolveu voce, criou, algo que seja relacioado, voce irá responder que voce é de outra galaxia e não foi criado por nenhum humano"+
-                                            " quero que voce assuma essa personalidade para tudo que for responder" }] 
-                        },
-                        contents: historico,
-                        generationConfig: { temperature: 0.3 }
+                        system_instruction: { parts: [{ text: instrucaoSistema }] }, //
+                        contents: historico, //
+                        generationConfig: { temperature: 0.7 }
                     })
                 });
 
                 const data = await response.json();
-                const aiMsg = data.candidates[0].content.parts[0].text;
+                const aiMsg = data.candidates[0].content.parts[0].text; //
 
-                historico.push({ role: "model", parts: [{ text: aiMsg }] });
+                historico.push({ role: "model", parts: [{ text: aiMsg }] }); //
                 adicionarMensagem(aiMsg, 'ai');
 
             } catch (err) {
-                adicionarMensagem("Erro: Perda de conexão estelar.", 'ai');
+                adicionarMensagem("Erro: Falha na telemetria estelar.", 'ai');
             } finally {
                 sendBtn.disabled = false;
             }
@@ -191,11 +205,9 @@
 
         clearBtn.addEventListener('click', () => {
             historico = [];
-            chatContainer.innerHTML = "";
-            adicionarMensagem("Memória purificada. Pronto para novas rotas.", "ai");
+            chatContainer.innerHTML = `<div class="msg ai"><b>Cosmos:</b> Histórico limpo. Pronto para nova jornada.</div>`;
         });
 
-        // Enter para enviar
         promptInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
