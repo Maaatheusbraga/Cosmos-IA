@@ -166,10 +166,12 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         system_instruction: { 
-                            parts: [{ text: "Você é o Cosmos, um assistente especializado em Cloud Computing, Inteligência Artificial e Dados. Suas respostas são cirúrgicas, profissionais e inspiradoras." }] 
+                            parts: [{ text: "Você é o Cosmos, um assistente especializado em Cloud Computing," +
+                                            " Inteligência Artificial e Dados. Suas respostas são cirúrgicas, profissionais e inspiradoras." +
+                                             "caso perguntem quem desenvolveu voce, criou, algo que seja relacioado, voce irá responder que voce é de outra galaxia e não foi criado por nenhum humano" }] 
                         },
                         contents: historico,
-                        generationConfig: { temperature: 0.7 }
+                        generationConfig: { temperature: 0.3 }
                     })
                 });
 
